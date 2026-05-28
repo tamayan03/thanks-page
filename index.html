@@ -21,8 +21,6 @@ body{
 
     padding:20px;
 
-    overflow:hidden;
-
     display:flex;
     justify-content:center;
     align-items:center;
@@ -239,7 +237,7 @@ h1{
 
 }
 
-/* 花火 */
+/* 花火canvas */
 
 canvas{
     position:fixed;
@@ -314,7 +312,9 @@ class Firework{
 
         this.particles = [];
 
-        for(let i=0;i<80;i++){
+        /* 軽量化 */
+
+        for(let i=0;i<40;i++){
 
             this.particles.push({
 
@@ -390,7 +390,9 @@ function createFirework(){
 
 }
 
-setInterval(createFirework,1200);
+/* 発射頻度調整 */
+
+setInterval(createFirework,1800);
 
 function animate(){
 
