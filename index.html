@@ -326,7 +326,7 @@ TEAM B のメンバーのみんな、<br>
 チーム開発を通して、<br>
 協力して作り上げる大切さを学ぶことができました。<br><br>
 
-本当にありがとうございました!!!
+本当にありがとうございました。
 
 </div>
 
@@ -377,7 +377,7 @@ setTimeout(() => {
 
 },5000);
 
-/* 軽い花火 */
+/* 花火 */
 
 const canvas = document.getElementById("fireworks");
 const ctx = canvas.getContext("2d");
@@ -401,7 +401,9 @@ class Firework{
 
         this.particles=[];
 
-        for(let i=0;i<10;i++){
+        /* 花火量UP */
+
+        for(let i=0;i<25;i++){
 
             this.particles.push({
 
@@ -454,11 +456,13 @@ class Firework{
 
 const fireworks=[];
 
+/* 発射頻度UP */
+
 setInterval(()=>{
 
     fireworks.push(new Firework());
 
-},4000);
+},2000);
 
 function animate(){
 
