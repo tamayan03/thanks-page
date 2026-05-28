@@ -16,25 +16,22 @@
 }
 
 html{
-    overflow-x:hidden;
+    overflow:hidden;
 }
 
 body{
 
-    overflow-x:hidden;
+    overflow:hidden;
 
     min-height:100vh;
-
-    padding:20px;
 
     display:flex;
     justify-content:center;
     align-items:center;
 
     background:
-    radial-gradient(circle at 20% 20%, rgba(168,85,247,0.15), transparent 25%),
-    radial-gradient(circle at 80% 30%, rgba(59,130,246,0.12), transparent 25%),
-    radial-gradient(circle at 50% 100%, rgba(236,72,153,0.10), transparent 35%),
+    radial-gradient(circle at top left, rgba(168,85,247,0.18), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(59,130,246,0.15), transparent 30%),
     linear-gradient(145deg,#050816,#0b1020,#111827);
 
     font-family:"Segoe UI",sans-serif;
@@ -42,42 +39,30 @@ body{
     color:white;
 }
 
-/* 花火 */
-
-#fireworks{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    z-index:0;
-    pointer-events:none;
-}
-
 /* 背景ぼかし */
 
 .blur1{
     position:absolute;
-    width:350px;
-    height:350px;
+    width:300px;
+    height:300px;
     background:#9333ea;
     border-radius:50%;
-    left:-120px;
-    bottom:-120px;
+    left:0;
+    bottom:0;
     filter:blur(120px);
-    opacity:0.25;
+    opacity:0.2;
 }
 
 .blur2{
     position:absolute;
-    width:280px;
-    height:280px;
+    width:250px;
+    height:250px;
     background:#2563eb;
     border-radius:50%;
-    right:-80px;
-    top:-80px;
+    right:0;
+    top:0;
     filter:blur(120px);
-    opacity:0.2;
+    opacity:0.15;
 }
 
 /* メインカード */
@@ -105,11 +90,9 @@ body{
     position:relative;
 
     z-index:2;
-
-    animation:fade 1.8s ease;
 }
 
-/* 上の文字 */
+/* 上 */
 
 .small{
 
@@ -119,9 +102,11 @@ body{
 
     font-size:13px;
 
-    margin-bottom:20px;
+    margin-bottom:25px;
 
-    opacity:0.9;
+    opacity:0;
+
+    animation:fade 1.5s ease forwards;
 }
 
 /* タイトル */
@@ -132,11 +117,17 @@ h1{
 
     line-height:1.1;
 
-    margin-bottom:30px;
+    margin-bottom:35px;
 
     font-weight:700;
 
-    word-break:keep-all;
+    opacity:0;
+
+    transform:translateY(20px);
+
+    animation:title 1.8s ease forwards;
+
+    animation-delay:0.8s;
 }
 
 .highlight{
@@ -161,6 +152,12 @@ h1{
 
     background:
     linear-gradient(to right,#9333ea,#3b82f6,#ec4899);
+
+    opacity:0;
+
+    animation:fade 1.5s ease forwards;
+
+    animation-delay:1.8s;
 }
 
 /* 本文 */
@@ -174,6 +171,12 @@ h1{
     line-height:2.2;
 
     font-weight:300;
+
+    opacity:0;
+
+    animation:fade 2s ease forwards;
+
+    animation-delay:2.5s;
 }
 
 /* TEAM */
@@ -187,11 +190,31 @@ h1{
     letter-spacing:6px;
 
     font-size:14px;
+
+    opacity:0;
+
+    animation:fade 2s ease forwards;
+
+    animation-delay:3.3s;
 }
 
 /* フェード */
 
 @keyframes fade{
+
+    from{
+        opacity:0;
+    }
+
+    to{
+        opacity:1;
+    }
+
+}
+
+/* タイトル登場 */
+
+@keyframes title{
 
     from{
         opacity:0;
@@ -239,18 +262,10 @@ h1{
 
 }
 
-canvas{
-    position:fixed;
-    top:0;
-    left:0;
-}
-
 </style>
 </head>
 
 <body>
-
-<canvas id="fireworks"></canvas>
 
 <div class="blur1"></div>
 <div class="blur2"></div>
@@ -274,9 +289,6 @@ TEAM B のメンバーのみんな、<br>
 ご指導いただいた長谷川さん、<br>
 そして発表を聞いてくださった皆様へ。<br><br>
 
-チーム開発を通して、<br>
-協力して作り上げる大切さを学ぶことができました。<br><br>
-
 本当にありがとうございました。
 
 </div>
@@ -286,138 +298,6 @@ TEAM B SALE_SYSTEM
 </div>
 
 </div>
-
-<script>
-
-const canvas = document.getElementById("fireworks");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-window.addEventListener("resize", () => {
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-});
-
-class Firework{
-
-    constructor(x,y,color){
-
-        this.x = x;
-        this.y = y;
-        this.color = color;
-
-        this.particles = [];
-
-        /* 超軽量 */
-
-        for(let i=0;i<15;i++){
-
-            this.particles.push({
-
-                x:this.x,
-                y:this.y,
-
-                angle:Math.random()*Math.PI*2,
-
-                speed:Math.random()*4+1,
-
-                radius:Math.random()*2+1,
-
-                alpha:1
-
-            });
-
-        }
-
-    }
-
-    update(){
-
-        this.particles.forEach(p=>{
-
-            p.x += Math.cos(p.angle)*p.speed;
-            p.y += Math.sin(p.angle)*p.speed;
-
-            p.alpha -= 0.02;
-
-        });
-
-    }
-
-    draw(){
-
-        this.particles.forEach(p=>{
-
-            ctx.beginPath();
-
-            ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);
-
-            ctx.fillStyle = `rgba(${this.color},${p.alpha})`;
-
-            ctx.fill();
-
-        });
-
-    }
-
-}
-
-const fireworks = [];
-
-function createFirework(){
-
-    const x = Math.random()*canvas.width;
-    const y = Math.random()*canvas.height*0.5;
-
-    const colors = [
-        "168,85,247",
-        "59,130,246",
-        "236,72,153",
-        "255,255,255"
-    ];
-
-    fireworks.push(
-        new Firework(
-            x,
-            y,
-            colors[Math.floor(Math.random()*colors.length)]
-        )
-    );
-
-}
-
-/* 発射頻度 */
-
-setInterval(createFirework,3000);
-
-function animate(){
-
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    fireworks.forEach((f,index)=>{
-
-        f.update();
-        f.draw();
-
-        if(f.particles[0].alpha <= 0){
-
-            fireworks.splice(index,1);
-
-        }
-
-    });
-
-    requestAnimationFrame(animate);
-
-}
-
-animate();
-
-</script>
 
 </body>
 </html>
